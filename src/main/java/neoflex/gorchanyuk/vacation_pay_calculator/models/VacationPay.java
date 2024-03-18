@@ -1,16 +1,12 @@
 package neoflex.gorchanyuk.vacation_pay_calculator.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
-//Класс для более удобного представления ответа
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@Schema(description = "Модель для предоставдения размера отпускных")
 public class VacationPay {
 
-    private double vacationPay;
+    @Schema(description = "Размер отпускных", example = "65000.00")
+    private Double vacationPay;     //Размер отпускных
 }
