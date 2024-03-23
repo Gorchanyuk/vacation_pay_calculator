@@ -22,6 +22,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@Validated
 @RequestMapping("/calculate")
 @Tag(name = "Отпускные", description = "Контроллер для расчета отпускных")
 @ApiResponses({
@@ -29,7 +30,6 @@ import java.time.LocalDate;
         @ApiResponse(responseCode = "404",
                 content = @Content(schema = @Schema(implementation = InputDataErrorResponse.class)))
 })
-@Validated
 public interface VacationPayAPI {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

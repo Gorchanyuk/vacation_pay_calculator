@@ -25,6 +25,4 @@ public class VacationPayController implements VacationPayAPI {
 
         return service.calculate(startVacation, endVacation, avgSalary);
     }
-
-
 }

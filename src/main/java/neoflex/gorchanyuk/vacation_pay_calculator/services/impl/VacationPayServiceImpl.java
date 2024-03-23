@@ -1,8 +1,5 @@
 package neoflex.gorchanyuk.vacation_pay_calculator.services.impl;
 
-import de.jollyday.HolidayCalendar;
-import de.jollyday.HolidayManager;
-import de.jollyday.ManagerParameters;
 import lombok.RequiredArgsConstructor;
 import neoflex.gorchanyuk.vacation_pay_calculator.models.VacationPay;
 import neoflex.gorchanyuk.vacation_pay_calculator.services.VacationPayService;
@@ -22,6 +19,8 @@ public class VacationPayServiceImpl implements VacationPayService {
      */
     private static final double AVG_DAYS = 29.3;
 
+    private final CounterDays counterDays;
+
     /**
      * Вычисляет размер отпускных по количеству дней отпуска
      *
@@ -35,7 +34,7 @@ public class VacationPayServiceImpl implements VacationPayService {
         VacationPay vacationPay = new VacationPay();
 
         double result = avgSalary / AVG_DAYS * days;
-        vacationPay.setVacationPay(Math.round(result * 100) / 100.0);// Задаем отпусные, округляя до сотых
+        vacationPay.setVacationPay(Math.round(result * 100) / 100.0);   // Задаем отпусные, округляя до сотых
         return vacationPay;
     }
 
@@ -50,32 +49,8 @@ public class VacationPayServiceImpl implements VacationPayService {
     @Override
     public VacationPay calculate(LocalDate startVacation, LocalDate endVacation, double avgSalary) {
 
-        int daysVacation = getCountDaysForPay(startVacation, endVacation);
+        int daysVacation = counterDays.getCountDaysForPay(startVacation, endVacation);
         return calculate(daysVacation, avgSalary);
     }
-
-    /**
-     * Вычисляет количество дней из заданного диапазона (включая первый и последний), которые подлежат оплате.
-     * Получаем все праздничные дни Российской Федерации (в демонстрационных целях использована готовая библиотека,
-     * некоторые праздничные дни могут не соответствовать действительности)
-     *
-     * @param startVacation дата начала отпуска
-     * @param endVacation   дата окончания отпуска
-     * @return количесво оплачиваемых дней
-     */
-    private int getCountDaysForPay(LocalDate startVacation, LocalDate endVacation) {
-
-        HolidayManager holidayManager = HolidayManager.getInstance(ManagerParameters.create(HolidayCalendar.RUSSIA));
-        LocalDate date = startVacation;
-        int daysVacation = 0;
-
-        while (!date.isAfter(endVacation)) {
-            if (holidayManager.isHoliday(date)) {
-                continue;
-            }
-            daysVacation++;
-            date = date.plusDays(1);
-        }
-        return daysVacation;
-    }
 }
+
